@@ -24,6 +24,10 @@
     [super viewDidLoad];
     self.taskArray = [NSMutableArray new];
     self.backgroundColorArray = [NSMutableArray new];
+    UISwipeGestureRecognizer *rightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(rightSwipeHandle:)];
+    rightRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [rightRecognizer setNumberOfTouchesRequired:1];
+    [self.tableView addGestureRecognizer:rightRecognizer];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -76,9 +80,45 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self.taskArray removeObjectAtIndex:indexPath.row];
-    [self.backgroundColorArray removeObjectAtIndex:indexPath.row];
-    [self.tableView reloadData];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Task" message:@"are you sure?" preferredStyle:UIAlertActionStyleDefault];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.taskArray removeObjectAtIndex:indexPath.row];
+        [self.backgroundColorArray removeObjectAtIndex:indexPath.row];
+        [self.tableView reloadData];
+    }];
+    [alertController addAction:cancel];
+    [alertController addAction:confirm];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+}
+
+- (void)rightSwipeHandle:(UISwipeGestureRecognizer*)gestureRecognizer {
+    CGPoint location = [gestureRecognizer locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
+    if ([self.backgroundColorArray objectAtIndex:indexPath.row] == [UIColor greenColor] || [self.backgroundColorArray objectAtIndex:indexPath.row] == [UIColor whiteColor]) {
+        [self.backgroundColorArray replaceObjectAtIndex:indexPath.row withObject:[UIColor yellowColor]];
+
+    }else if ([self.backgroundColorArray objectAtIndex:indexPath.row] == [UIColor yellowColor]){
+        [self.backgroundColorArray replaceObjectAtIndex:indexPath.row withObject:[UIColor redColor]];
+    }else if ([self.backgroundColorArray objectAtIndex:indexPath.row] == [UIColor redColor]){
+        [self.backgroundColorArray replaceObjectAtIndex:indexPath.row withObject:[UIColor greenColor]];
+    }
+        [self.tableView reloadData];
+}
+
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
+    NSString *task = [self.taskArray objectAtIndex:sourceIndexPath.row];
+    UIColor *bgColor = [self.backgroundColorArray objectAtIndex:sourceIndexPath.row];
+    
+    [self.taskArray removeObjectAtIndex:sourceIndexPath.row];
+    [self.backgroundColorArray removeObjectAtIndex:sourceIndexPath.row];
+    
+    [self.taskArray insertObject:task atIndex:destinationIndexPath.row];
+    [self.backgroundColorArray insertObject:bgColor atIndex:destinationIndexPath.row];
+    
 }
 
 @end
