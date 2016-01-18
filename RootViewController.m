@@ -80,7 +80,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Task" message:@"are you sure?" preferredStyle:UIAlertActionStyleDefault];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Task" message:@"are you sure?" preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
     UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
