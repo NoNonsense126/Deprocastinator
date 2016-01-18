@@ -50,16 +50,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if([self.editButton.title isEqualToString:@"Edit"]){
+
     if([[self.backgroundColorArray objectAtIndex:indexPath.row] isEqual:[UIColor whiteColor]]){
         [self.backgroundColorArray replaceObjectAtIndex:indexPath.row withObject:[UIColor greenColor]];
     }else{
         [self.backgroundColorArray replaceObjectAtIndex:indexPath.row withObject:[UIColor whiteColor]];
     }
-//    }else{
-//        [self.taskArray removeObjectAtIndex:indexPath.row];
-//        [self.backgroundColorArray removeObjectAtIndex:indexPath.row];
-//    }
     
     [self.tableView reloadData];
 
